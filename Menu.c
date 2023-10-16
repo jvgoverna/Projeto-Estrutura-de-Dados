@@ -21,6 +21,10 @@ int main(){
         fgets(option,sizeof(option),stdin);
 
         if(isdigit(option[0])){
+            if (option[1] >= '1'){
+                printf("ERRO\n");
+            }
+            else{
             switch (option[0]){
                 case '1':
                     puts("---------- Opção 1 ----------");
@@ -49,7 +53,9 @@ int main(){
                     puts("ERRO Digite uma opção válida!");
                     break;
             }
-        }else{
+        }
+        }
+        else{
             puts("ERRO Digite um número válido!");
         }
     }
