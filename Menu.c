@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include "Sobre.c"
-#include <ctype.h>
+#include <ctype.h> //Biblioteca para dizer se um dado Byte representa um caractere alfanumérico ou não
 
 
 
 
 int main(){
-    char option [100];
+    char option [4];
     while(1){
         printf("------------------------------\n");
         printf("1 - Cadastrar novo Paciente\n");
@@ -20,8 +20,8 @@ int main(){
 
         fgets(option,sizeof(option),stdin);
 
-        if(isdigit(option[0])){
-            if (option[1] >= '1'){
+        if(isdigit(option[0])){ //verifica se o primeiro caractere é um número
+            if (ispunct(option[1])||option[1] >= '0'){ //verifica se o segundo caractere é um número ou um caractere de Pontuação
                 printf("ERRO\n");
             }
             else{
@@ -55,7 +55,7 @@ int main(){
             }
         }
         }
-        else{
+        else{ //se o primeiro caractere não for um número
             puts("ERRO Digite um número válido!");
         }
     }
