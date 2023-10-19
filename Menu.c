@@ -1,13 +1,15 @@
 #include <stdio.h>
-#include "Sobre.c"
+#include "Cadastrar.h"
+#include "Sobre.h"
 #include <ctype.h> //Biblioteca para dizer se um dado Byte representa um caractere alfanumérico ou não
 
 
 
 
 int main(){
+    Data *data = startData();
     char option [4];
-    while(1){
+    while(1){ //while True
         printf("------------------------------\n");
         printf("1 - Cadastrar novo Paciente\n");
         printf("2 - Consultar paciente Cadastrado\n");
@@ -28,6 +30,8 @@ int main(){
             switch (option[0]){
                 case '1':
                     puts("---------- Opção 1 ----------");
+                    teste(data);
+                    while(getchar() != '\n'); //limpa o buffer de entrada , remove todas os caracteres pendentes até que encontre o '\n'
                     break;
                 case '2':
                     puts("---------- Opção 2 ----------");
