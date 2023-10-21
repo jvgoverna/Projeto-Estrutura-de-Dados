@@ -2,14 +2,7 @@
 #include "Sobre.h"
 #include "Cadastrar.h"
 
-
-void limparBufferInput(){
-    while(getchar() != '\n');
-}
-
-
 int main(){
-    Data *data = startData();
     char option[4];
     while(1){
         puts("-------------------------------");
@@ -34,8 +27,7 @@ int main(){
                 break;
             case '1':
                 puts("---------- Opção 1 ----------");
-                teste(data);
-                limparBufferInput();
+                menuCadastrar();
                 break;
             case '2':
                 puts("---------- Opção 2 ----------");
@@ -50,6 +42,8 @@ int main(){
                 puts("---------- Opção 5 ----------");
                 sobre();
                 break;
+
+            return 0;
             }
         }
     }
