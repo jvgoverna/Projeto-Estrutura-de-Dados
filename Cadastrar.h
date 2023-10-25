@@ -2,7 +2,10 @@
 #define CADASTRAR__H
 #include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
+
+
+
+
 typedef struct Data{
     int dia;
     int mes;
@@ -12,7 +15,7 @@ typedef struct Data{
 typedef struct Registro {
     char nome[20];
     int idade;
-    char rg[10];
+    char rg[11];
     Data entrada;
 } Registro;
 
@@ -46,13 +49,13 @@ void inserir(Lista *lista, Registro dados){
         printf("Pessoa ja foi inserida!\n");
         return;
     }*/
-    Elista *nova = cria_Elista(dados); //Cria a Elista
+    Elista *nova = cria_Elista(dados); //Cria a Elista recebendo os dados de um Struct!
     if(lista ->inicio == NULL){
         lista -> inicio = nova;
     }else{
         Elista *atual = lista -> inicio; //Começa desde o primeiro valor!
         Elista *anterior = NULL; //Tambem
-        while (atual != NULL){//Se fosse atual -> valor >= valor seria cresecente!
+        while (atual != NULL){
             anterior = atual;
             atual = atual -> proximo;
 
@@ -102,7 +105,6 @@ void procurarNome(Lista* lista, char nome[]) {
         puts("Paciente não encontrado!");
       }
 }
-
 void imprimir_listacomp(Lista* lista) {
     Elista* atual = lista->inicio;
     printf("Total de Pessoas Cadastradas: %d pessoas\n", lista->quantidade_Elmentos);
@@ -116,8 +118,17 @@ void imprimir_listacomp(Lista* lista) {
   printf("\n");
 }
 
-
+ 
 void menuCadastrar(){
+    //iniciar arquivo 
+    //FILE *Arquivo;
+    //Arquivo = fopen ("infos.txt","a");
+
+    //if (Arquivo == NULL) {
+     //printf("\nArquivo não pode ser aberto");
+     //}
+
+    
     Lista *lista = cria_lista();
     Registro registro;
     char option[4];
@@ -142,55 +153,51 @@ void menuCadastrar(){
                 return;
                 break;
             case '1':
-                puts("---------- Opção 1 ----------");
-                //Registro *registro = startRegistro();
-                puts("Nome: ");
-                int len_nome = sizeof(registro.nome);
-                for(int i = 0 ; i < len_nome;i++){
-                  if(registro.nome[i] == '\n'){
-                    registro.nome[i] = '\0';
-                  }
+              puts("---------- Opção 1 ----------");
+              //Registro *registro = startRegistro();
+              puts("Nome: ");
+              int len_nome = sizeof(registro.nome);
+              for(int i = 0 ; i < len_nome;i++){
+                if(registro.nome[i] == '\n'){
+                  registro.nome[i] = '\0';
                 }
-                int len_Rg = sizeof(registro.rg);
-                fgets(registro.nome, len_nome,stdin);
+              }
+              int len_Rg = sizeof(registro.rg);
+              fgets(registro.nome, len_nome,stdin);
+              int localvar = 0;
+              while(1){
                 puts("RG: ");
                 fgets(registro.rg, len_Rg, stdin);
-              
                 for(int i = 0; i < len_Rg; i++){
                   if(registro.rg[i] == '\n'){
-                    registro.rg[i] = '\0'; //quando o usuario digitar mais de 10 dígitos o programa salva até 9
+                    registro.rg[i] = '\0'; //Troca o \n pelo enter 
+                    localvar =i;
                   }
                 }
-              
-                for(int i = 0 ; i < 9 ; i++){
-                    if(registro.rg[i] < 9){
-                      printf("ERRO!! Rg precisa ter 9 dígitos!");
-                      //ta dando problema p ele salva de qualquer forma no ponteiro
-                      //E que da certo quando é sequencial! Quando tem algum ERRO ai nn fica mais sequencial e da erro
-                      //acabei de fazer um rg de 10 digitos e deu errado
-                      //cade?
-                    
-                      //roda no terminal cria 1 pessoa com rg de 9 e outra de 10
-                      //tu mudou o codigo denovo q eu tinha arumo
-                      //acompanha meu cursor
-                      return; //Volta para o Menu Principal!
-                    }
+                if(localvar == 9){ //Rg de 9 dígitos!!
+                  break;
                 }
-              
-                for(int i = 0; i < sizeof(registro.rg); i++){
-                  if(registro.rg[i] >= 'a' && registro.rg[i] <= 'z'){
-                    printf("ERRO");
-                    return; 
-                   
+                else if(localvar != 9 ){
+                  puts("ERRO!! Rg precisa ter 9 dígitos!");
                   }
+              }
+              
+
+/*                for(int i = 0; i < sizeof(registro.rg); i++){
+                if(registro.rg[i] >= 'a' && registro.rg[i] <= 'z' && registro.rg[i] >= 'A' && registro.rg[i] <= 'Z'){
+                  printf("ERRO");
+                  fgets(registro.rg, len_Rg, stdin); 
+
                 }
-                
-                printf("Idade: ");
-                scanf("%d", &registro.idade);
-                printf("Dia / Mês / Ano: ");
-                scanf("%d %d %d", &registro.entrada.dia, &registro.entrada.mes, &registro.entrada.ano);
-                inserir(lista, registro);
-                limpaBufferInput();
+              }*/
+              //getchar();
+              printf("Idade: ");
+              scanf("%d", &registro.idade);
+              printf("Dia / Mês / Ano: ");
+              scanf("%d %d %d", &registro.entrada.dia, &registro.entrada.mes, &registro.entrada.ano);
+              inserir(lista, registro);
+              limpaBufferInput();
+              break;
                 break;
             case '2':
                 puts("---------- Opção 2 ----------");
@@ -212,7 +219,7 @@ void menuCadastrar(){
             }
         }
     }
-}
+  }
 
 
 
