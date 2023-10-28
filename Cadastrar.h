@@ -2,7 +2,7 @@
 #define CADASTRAR__H
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 typedef struct Data {
   int dia;
   int mes;
@@ -41,10 +41,6 @@ Elista *cria_Elista(Registro dados) {
 }
 
 void inserir(Lista *lista, Registro dados) {
-  /* if(verifica_repeticao(lista,dados)){
-       printf("Pessoa ja foi inserida!\n");
-       return;
-   }*/
   Elista *nova = cria_Elista(dados); // Cria a Elista recebendo os dados de um Struct!
   if (lista->inicio == NULL) {
     lista->inicio = nova;
@@ -55,17 +51,17 @@ void inserir(Lista *lista, Registro dados) {
       anterior = atual;
       atual = atual->proximo;
     }
-    if (anterior == NULL) { // Se o anterior for NULL, significa que o valor é
-                            // menor que o primeiro elemento da lista, logo, o
-                            // novo elemento será o primeiro da lista.
+    if (anterior == NULL) {  // Se o anterior for NULL, significa que o valor é
+                             // menor que o primeiro elemento da lista, logo, o
+                             // novo elemento será o primeiro da lista.
       nova->proximo = atual; // o proximo elemento apartir da nova celula aponta
                              // para o primeiro elemento da lista.
-      lista->inicio = nova; // O primeiro elemento da lista recebe a nova
-                            // celula.
+      lista->inicio = nova;  // O primeiro elemento da lista recebe a nova
+                             // celula.
 
     } else {
       if (atual == NULL) { // Significa que o valor é maior que todos os elementos da
-                            // lista, logo, o novo elemento será o ultimo da lista.
+                  // lista, logo, o novo elemento será o ultimo da lista.
         anterior->proximo = nova;
       } else { // Siginifica que o valor é maior que o anterior e menor que o
                // proximo
@@ -80,31 +76,6 @@ void inserir(Lista *lista, Registro dados) {
 void limpaBufferInput() {
   while (getchar() != '\n');
 }
-
-void procurarNome(Lista *lista, char nome[]) {
-  printf("%s", nome);
-  int control = 0;
-  Elista *atual = lista->inicio;
-  if (lista->quantidade_Elmentos == 0) {
-    // quando não há nome ou pacientes na lista
-    control = 1;
-  }
-  while (atual != NULL) { // Enquanto a lista não chegar ao final!
-    for (int i = 0; nome[i] != '\0'; i++) { // percorre a lista até achar o
-                                            // enter
-      if (nome[i] != atual->dados.nome[i]) { // se o nome for diferente!
-        control = 1;
-        break;
-      }
-    }
-    atual = atual->proximo;
-  }
-  if (control == 0) {
-    puts("Paciente encontrado!");
-  } else if (control == 1) {
-    puts("Paciente não encontrado!");
-  }
-}
 /*void imprimir_listacomp(Lista *lista) {
   Elista *atual = lista->inicio;
   printf("Total de Pessoas Cadastradas: %d pessoas\n",
@@ -113,58 +84,111 @@ void procurarNome(Lista *lista, char nome[]) {
     printf("Nome: %s", atual->dados.nome);
     printf("Rg: %s \n", atual->dados.rg);
     printf("Idade: %d \n", atual->dados.idade);
-    printf("Data : %d/%d/%d\n", atual->dados.entrada.dia,atual->dados.entrada.mes,atual->dados.entrada.ano);
+    printf("Data : %d/%d/%d\n",
+atual->dados.entrada.dia,atual->dados.entrada.mes,atual->dados.entrada.ano);
     printf("\n");
     atual = atual->proximo;
   }
   printf("\n");
 }*/
 
-void escreverArquivo(Registro registro){
+void escreverArquivo(Registro registro) {
   FILE *arquivo;
 
-  arquivo = fopen("Cadastros.txt","a"); //Abre em mode Append!
-  //Escreve
-  fprintf(arquivo,"Nome: %s",registro.nome);
-  fprintf(arquivo,"RG: %s\n",registro.rg);
-  fprintf(arquivo,"Idade: %d\n",registro.idade);
-  fprintf(arquivo,"Dia: %d / Mes: %d / Ano: %d\n",registro.entrada.dia,registro.entrada.mes,registro.entrada.ano);
-  fclose(arquivo); //Fecha automaticamente para escrever direto sem a neccesidade de encerrar o Prograam!
+  arquivo = fopen("Cadastros.txt", "a"); // Abre em mode Append!
+  // Escreve
+  fprintf(arquivo, "Nome: %s", registro.nome);
+  fprintf(arquivo, "RG: %s\n", registro.rg);
+  fprintf(arquivo, "Idade: %d\n", registro.idade);
+  fprintf(arquivo, "Dia: %d / Mes: %d / Ano: %d\n", registro.entrada.dia,
+          registro.entrada.mes, registro.entrada.ano);
+  fclose(arquivo); // Fecha automaticamente para escrever direto sem a
+                   // neccesidade de encerrar o Prograam!
 }
 
-void escreverArquivobin(Registro registro){
+void escreverArquivobin(Registro registro) {
   FILE *arquivo;
 
-  arquivo = fopen("CadastrosBin.txt","ab"); //Abre em mode Append!
-  //Escreve
+  arquivo = fopen("CadastrosBin.txt", "ab"); // Abre em mode Append!
+  // Escreve
   fwrite(&registro, sizeof(Registro), 1, arquivo);
 
-  
-  fclose(arquivo); //Fecha automaticamente para escrever direto sem a neccesidade de encerrar o Prograam!
+  fclose(arquivo); // Fecha automaticamente para escrever direto sem a
+                   // neccesidade de encerrar o Programa!
 }
 
-void leituraBin(Registro registro){
+void leituraBin(Registro registro) {
   FILE *arquivo;
-  arquivo = fopen("CadastrosBin.txt","rb");
-   while (fread (&registro, sizeof(struct Registro), 1, arquivo)){
-      printf ("Nome = %s Rg = %s Idade = %d Data = %d/%d/%d\n",registro.nome, registro.rg, registro.idade, registro.entrada.dia,registro.entrada.mes,registro.entrada.ano);
-   }
+  arquivo = fopen("CadastrosBin.txt", "rb");
+  if(arquivo == NULL){
+    puts("ERRO! Arquivo vazio!");
+    return;
+  }
+  while (fread(&registro, sizeof(struct Registro), 1, arquivo)) {
+    printf("\nNome = %s Rg = %s Idade = %d Data = %d/%d/%d\n", registro.nome,
+           registro.rg, registro.idade, registro.entrada.dia,
+           registro.entrada.mes, registro.entrada.ano);
+  }
   fclose(arquivo);
-  }  
+}
+
+void consultarpaciente(Registro registro, char referencia[]) {
+  int verificador = 0;
+  FILE *arquivo;
+  arquivo = fopen("CadastrosBin.txt", "rb");
+  if(arquivo == NULL){
+    puts("ERRO! Arquivo vazio!");
+    return;
+  }
+  while (fread(&registro, sizeof(struct Registro), 1, arquivo)) {
+    if (strcmp(referencia, registro.nome) == 0) { //Se o Nome que pesquisar for igual ao escrito no arquivo retorna 0, oq quer dizer que é igual!
+      verificador = 1; //encontrou a pessoa!
+      printf("Nome = %s Rg = %s Idade = %d Data = %d/%d/%d\n", registro.nome, //printa a pessoa cadastrada
+             registro.rg, registro.idade, registro.entrada.dia,
+             registro.entrada.mes, registro.entrada.ano);
+      
+    }
+      
+  }
+  if(verificador == 0){ //
+    puts("Pessoa não foi cadastrada!");
+  }
+  fclose(arquivo);
+}
+
+
+void atualizarpaciente(Registro registro, char referencia2[]) {
+  int verificador = 0;
+  FILE *arquivo;
+  FILE *arquivoparalelo;
+  arquivo = fopen("CadastrosBin.txt", "rb");
+  arquivoparalelo =  fopen("CadastrosBinparalelo.txt", "wb");
+
+  if(arquivo == NULL){
+    puts("ERRO! Arquivo vazio!");
+    return;
+  }
+  //escrever o conteudo do arquivo para o paralelo
+  while (fread(&registro, sizeof(struct Registro), 1, arquivo)) { //Lendo o conteúdo do arquivo
+    if (strcmp(referencia2, registro.nome) == 0) { 
+      puts("Nova idade: ");
+      scanf("%d", &registro.idade);
+      puts("idade salva");
+    }
+      fwrite(&registro, sizeof(Registro), 1, arquivoparalelo);
+  }
+  fclose(arquivo);
+  fclose(arquivoparalelo);
+  remove("CadastrosBin.txt");
+  rename("CadastrosBinparalelo.txt" , "CadastrosBin.txt");
+  limpaBufferInput();
+}
 
 
 
 
 
 void menuCadastrar() {
-  // iniciar arquivo
-  // FILE *Arquivo;
-  // Arquivo = fopen ("infos.txt","a");
-
-  // if (Arquivo == NULL) {
-  // printf("\nArquivo não pode ser aberto");
-  // }
-
   Lista *lista = cria_lista();
   Registro registro;
   char option[4];
@@ -240,15 +264,19 @@ void menuCadastrar() {
         char referencia[20];
         printf("Digite o nome do paciente cadastrado: ");
         fgets(referencia, sizeof(referencia), stdin);
-        procurarNome(lista, referencia);
+        consultarpaciente(registro, referencia);
         break;
       case '3':
         puts("---------- Opção 3 ----------");
         leituraBin(registro);
-        //imprimir_listacomp(lista);
+        // imprimir_listacomp(lista);
         break;
       case '4':
         puts("---------- Opção 4 ----------");
+        char referencia2[20];
+        printf("Digite o nome do paciente cadastrado: ");
+        fgets(referencia2, sizeof(referencia), stdin);
+        atualizarpaciente(registro, referencia2);
         break;
       case '5':
         puts("---------- Opção 5 ----------");
