@@ -123,7 +123,7 @@ void leituraBin(Registro registro) {
   if(arquivo == NULL){
     puts("ERRO! Arquivo vazio!");
     return;
-  
+
   }
   int num = 1;
   while (fread(&registro, sizeof(struct Registro), 1, arquivo)) {
@@ -150,9 +150,9 @@ void consultarpaciente(Registro registro, char referencia[]) {
       printf("Nome = %s Rg = %s Idade = %d Data = %d/%d/%d\n", registro.nome, //printa a pessoa cadastrada
              registro.rg, registro.idade, registro.entrada.dia,
              registro.entrada.mes, registro.entrada.ano);
-      
+
     }
-      
+
   }
   if(verificador == 0){ //
     puts("Pessoa não foi cadastrada!");
@@ -225,8 +225,6 @@ void removerpaciente(Registro registro, char referencia3[]) {
 
   remove("CadastrosBin.txt");
   rename("CadastrosBinparalelodelete.txt" , "CadastrosBin.txt");
-
-  limpaBufferInput();
   return;
 }
 
@@ -328,7 +326,7 @@ void menuCadastrar() {
         printf("Digite o nome do paciente cadastrado: ");
         fgets(referencia3, sizeof(referencia), stdin);
         removerpaciente(registro, referencia3);
-        
+
         break;
       }
     }
