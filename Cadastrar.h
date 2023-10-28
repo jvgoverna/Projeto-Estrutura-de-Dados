@@ -118,7 +118,18 @@ void imprimir_listacomp(Lista* lista) {
   printf("\n");
 }
 
- 
+void escreverArquivo(Registro registro){
+  FILE *arquivo;
+
+  arquivo = fopen("Cadastros.txt","a");
+  
+  fprintf(arquivo,"Nome: %s",registro.nome);
+  fprintf(arquivo,"RG: %s\n",registro.rg);
+  fprintf(arquivo,"Idade: %d\n",registro.idade);
+  fprintf(arquivo,"Dia: %d / Mes: %d / Ano: %d\n",registro.entrada.dia,registro.entrada.mes,registro.entrada.ano);
+  fclose(arquivo);
+}
+
 void menuCadastrar(){
     //iniciar arquivo 
     //FILE *Arquivo;
@@ -193,9 +204,19 @@ void menuCadastrar(){
               //getchar();
               printf("Idade: ");
               scanf("%d", &registro.idade);
+              while (1) {
+                if (registro.idade <= 0 || registro.idade >= 120) {
+                  puts("ERRO Idade incorreta!");
+                  printf("Idade: ");
+                  scanf("%d", &registro.idade);
+                } else {
+                  break;
+                }
+              }
               printf("Dia / Mês / Ano: ");
               scanf("%d %d %d", &registro.entrada.dia, &registro.entrada.mes, &registro.entrada.ano);
               inserir(lista, registro);
+              escreverArquivo(registro);
               limpaBufferInput();
               break;
                 break;
