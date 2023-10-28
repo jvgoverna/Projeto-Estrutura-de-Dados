@@ -123,11 +123,15 @@ void leituraBin(Registro registro) {
   if(arquivo == NULL){
     puts("ERRO! Arquivo vazio!");
     return;
+  
   }
+  int num = 1;
   while (fread(&registro, sizeof(struct Registro), 1, arquivo)) {
+    printf("Pessoa %d: ",num);
     printf("\nNome = %s Rg = %s Idade = %d Data = %d/%d/%d\n", registro.nome,
            registro.rg, registro.idade, registro.entrada.dia,
            registro.entrada.mes, registro.entrada.ano);
+    num++;
   }
   fclose(arquivo);
 }
@@ -171,11 +175,16 @@ void atualizarpaciente(Registro registro, char referencia2[]) {
   //escrever o conteudo do arquivo para o paralelo
   while (fread(&registro, sizeof(struct Registro), 1, arquivo)) { //Lendo o conteúdo do arquivo
     if (strcmp(referencia2, registro.nome) == 0) { 
+      verificador = 1;
       puts("Nova idade: ");
       scanf("%d", &registro.idade);
       puts("idade salva");
     }
       fwrite(&registro, sizeof(Registro), 1, arquivoparalelo);
+  }
+  if(verificador == 0){
+    puts("Pessoa não Encontrada!");
+    return;
   }
   fclose(arquivo);
   fclose(arquivoparalelo);
@@ -184,7 +193,42 @@ void atualizarpaciente(Registro registro, char referencia2[]) {
   limpaBufferInput();
 }
 
+void removerpaciente(Registro registro, char referencia3[]) {
+  FILE *arquivo;
+  FILE *arquivoparalelo;
+  int verificador = 0;
+  arquivo = fopen("CadastrosBin.txt", "rb");
+  arquivoparalelo =  fopen("CadastrosBinparalelodelete.txt", "wb");
 
+  if (arquivo == NULL) {
+    puts("ERRO! Arquivo vazio!");
+    return;
+  }
+
+  // Escrever o conteudo do arquivo para o paralelo
+  while (fread(&registro, sizeof(struct Registro), 1, arquivo)) {
+    if (strcmp(referencia3, registro.nome) != 0) {
+      fwrite(&registro, sizeof(Registro), 1, arquivoparalelo);
+    } else {
+      verificador = 1;
+      printf("Paciente %s foi deletado\n", registro.nome);
+    }
+  }
+
+  if (verificador == 0) {
+    puts("Pessoa não encontrada!");
+    return;
+  }
+
+  fclose(arquivo);
+  fclose(arquivoparalelo);
+
+  remove("CadastrosBin.txt");
+  rename("CadastrosBinparalelodelete.txt" , "CadastrosBin.txt");
+
+  limpaBufferInput();
+  return;
+}
 
 
 
@@ -280,6 +324,11 @@ void menuCadastrar() {
         break;
       case '5':
         puts("---------- Opção 5 ----------");
+        char referencia3[20];
+        printf("Digite o nome do paciente cadastrado: ");
+        fgets(referencia3, sizeof(referencia), stdin);
+        removerpaciente(registro, referencia3);
+        
         break;
       }
     }
