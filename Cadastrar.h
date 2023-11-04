@@ -170,6 +170,7 @@ void atualizarpaciente(Registro registro, char referencia2[]) {
 
   if(arquivo == NULL){
     puts("ERRO! Arquivo vazio!");
+    remove("CadastrosBinparalelo.txt");
     return;
   }
   //escrever o conteudo do arquivo para o paralelo
@@ -183,6 +184,7 @@ void atualizarpaciente(Registro registro, char referencia2[]) {
       fwrite(&registro, sizeof(Registro), 1, arquivoparalelo);
   }
   if(verificador == 0){
+    remove("CadastrosBinparalelo.txt");
     puts("Pessoa não Encontrada!");
     return;
   }
@@ -202,6 +204,7 @@ void removerpaciente(Registro registro, char referencia3[]) {
 
   if (arquivo == NULL) {
     puts("ERRO! Arquivo vazio!");
+    remove("CadastrosBinparalelodelete.txt");
     return;
   }
 
@@ -217,6 +220,7 @@ void removerpaciente(Registro registro, char referencia3[]) {
 
   if (verificador == 0) {
     puts("Pessoa não encontrada!");
+    remove("CadastrosBinparalelodelete.txt");
     return;
   }
 
