@@ -1,5 +1,6 @@
 #ifndef ATENDIMENTO__H
 #define ATENDIMENTO__H
+
 #include "Cadastrar.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,6 +61,7 @@ void enfilerarPaciente(Fila *fila , Registro registro, char referencia[]) {
     if (strcmp(referencia, registro.nome) == 0) { //Se o Nome que pesquisar for igual ao escrito no arquivo retorna 0, oq quer dizer que é igual!
       verificador = 1; //encontrou a pessoa!
       enfileirar(fila, registro);
+      puts("Paciente foi colocado na fila com sucesso!");
     }
   }
   if(verificador == 0){ //
@@ -69,19 +71,42 @@ void enfilerarPaciente(Fila *fila , Registro registro, char referencia[]) {
 }
 void mostrarFila(Fila *fila){
   Efila *atual = fila->head;
-  printf("Head -> \n");
 
+  if(fila->qtde ==0){
+    puts("Não há pessoa na fila!");
+  }else{
+  printf("\nNúmero de pessoa na Fila: %d\n", fila->qtde);
+  printf("\nHead -> \n");
   while(atual != NULL){
     printf("%s", atual->dados.nome);
     atual = atual->proximo;
   }
 
   printf("<- Tail\n");
+  }
 }
 
 
+void desenfileirar(Fila *fila){
+  if(fila->qtde != 0){
+    //int valor = fila->head->dados;
+    Efila *liberar = fila->head;
 
-
+    if(fila->qtde == 1){ //apenas um valor na fila
+      fila->head = NULL;
+      fila->tail = NULL;
+      
+    }else{
+      fila->head = fila->head->proximo;
+      fila->head->anterior = NULL;
+    }
+    fila->qtde--;
+    free(liberar);
+    puts("Paciente desenfileirado");
+  }else{
+    printf("Fila vazia\n");
+  }
+}
 
 void menuAtendimento(){
     char option[4];
@@ -89,10 +114,10 @@ void menuAtendimento(){
     Registro registro;
     while(1){
         puts("-------------------------------");
-        puts("0 - Voltar ao Menu Principal");
         puts("1 - Enfileirar Pacientes");
         puts("2 - Desenfileirar Pacientes");
         puts("3 - Mostrar Fila");
+        puts("0 - Voltar ao Menu Principal");
         puts("-------------------------------");
         fgets(option,sizeof(option),stdin);
 
@@ -116,6 +141,7 @@ void menuAtendimento(){
                 break;
             case '2':
                 puts("---------- Opção 2 ----------");
+                desenfileirar(fila);
                 break;
             case '3':
                 puts("---------- Opção 3 ----------");
