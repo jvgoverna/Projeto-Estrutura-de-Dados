@@ -18,18 +18,19 @@ typedef struct Registro {
 
 typedef struct Elista { //(Celula)
   Registro dados;
+  struct Elista *anterior;
   struct Elista *proximo;
 } Elista;
 
-typedef struct Lista { //(LDE)
+typedef struct Lista { //(LDE) ()
   Elista *inicio;
   int quantidade_Elmentos;
 } Lista;
 
-Lista *cria_lista() {
-  Lista *lista = (Lista *)malloc(sizeof(Lista));
+Lista *cria_lista(){
+  Lista *lista = (Lista*)malloc(sizeof(Lista));
+  lista->quantidade_Elmentos= 0;
   lista->inicio = NULL;
-  lista->quantidade_Elmentos = 0;
   return lista;
 }
 
@@ -37,60 +38,22 @@ Elista *cria_Elista(Registro dados) {
   Elista *elista = (Elista *)malloc(sizeof(Elista));
   elista->dados = dados;
   elista->proximo = NULL;
+  elista->anterior = NULL;
   return elista;
 }
 
 void inserir(Lista *lista, Registro dados) {
-  Elista *nova = cria_Elista(dados); // Cria a Elista recebendo os dados de um Struct!
-  if (lista->inicio == NULL) {
-    lista->inicio = nova;
-  } else {
-    Elista *atual = lista->inicio; // Começa desde o primeiro valor!
-    Elista *anterior = NULL;       // Tambem
-    while (atual != NULL) {
-      anterior = atual;
-      atual = atual->proximo;
-    }
-    if (anterior == NULL) {  // Se o anterior for NULL, significa que o valor é
-                             // menor que o primeiro elemento da lista, logo, o
-                             // novo elemento será o primeiro da lista.
-      nova->proximo = atual; // o proximo elemento apartir da nova celula aponta
-                             // para o primeiro elemento da lista.
-      lista->inicio = nova;  // O primeiro elemento da lista recebe a nova
-                             // celula.
-
-    } else {
-      if (atual == NULL) { // Significa que o valor é maior que todos os elementos da
-                  // lista, logo, o novo elemento será o ultimo da lista.
-        anterior->proximo = nova;
-      } else { // Siginifica que o valor é maior que o anterior e menor que o
-               // proximo
-        nova->proximo = atual;
-        anterior->proximo = nova;
-      }
-    }
+  Elista *novo = cria_Elista(dados);
+  if(lista->quantidade_Elmentos>0){
+    lista->inicio->anterior =novo;
+    novo->proximo = lista->inicio;
   }
-  lista->quantidade_Elmentos++;
+    lista->inicio = novo;
+    lista->quantidade_Elmentos++;
 }
-
 void limpaBufferInput() {
   while (getchar() != '\n');
 }
-/*void imprimir_listacomp(Lista *lista) {
-  Elista *atual = lista->inicio;
-  printf("Total de Pessoas Cadastradas: %d pessoas\n",
-         lista->quantidade_Elmentos);
-  while (atual != NULL) {
-    printf("Nome: %s", atual->dados.nome);
-    printf("Rg: %s \n", atual->dados.rg);
-    printf("Idade: %d \n", atual->dados.idade);
-    printf("Data : %d/%d/%d\n",
-atual->dados.entrada.dia,atual->dados.entrada.mes,atual->dados.entrada.ano);
-    printf("\n");
-    atual = atual->proximo;
-  }
-  printf("\n");
-}*/
 
 void escreverArquivo(Registro registro) {
   FILE *arquivo;
@@ -118,22 +81,30 @@ void escreverArquivobin(Registro registro) {
 }
 
 void leituraBin(Registro registro) {
+  //passar todos os registros para a lista:
   FILE *arquivo;
+  Lista *lista = cria_lista();
   arquivo = fopen("CadastrosBin.txt", "rb");
   if(arquivo == NULL){
     puts("ERRO! Arquivo vazio!");
     return;
 
   }
-  int num = 1;
   while (fread(&registro, sizeof(struct Registro), 1, arquivo)) {
-    printf("Pessoa %d: ",num);
-    printf("\nNome = %s Rg = %s Idade = %d Data = %d/%d/%d\n", registro.nome,
-           registro.rg, registro.idade, registro.entrada.dia,
-           registro.entrada.mes, registro.entrada.ano);
-    num++;
+    inserir(lista, registro);
   }
   fclose(arquivo);
+  //mostrar a lista:
+  Elista *atual = lista->inicio;
+  if(atual==NULL){
+    puts("Não há pessoas na lista");
+  }
+  while(atual!=NULL){
+    printf("Nome = %s Rg = %s Idade = %d Data = %d/%d/%d\n", atual->dados.nome,
+     atual->dados.rg, atual->dados.idade, atual->dados.entrada.dia,
+     atual->dados.entrada.mes, atual->dados.entrada.ano);
+    atual=atual->proximo;
+  }
 }
 
 void consultarpaciente(Registro registro, char referencia[]) {
@@ -235,7 +206,6 @@ void removerpaciente(Registro registro, char referencia3[]) {
 
 
 void menuCadastrar() {
-  Lista *lista = cria_lista();
   Registro registro;
   char option[4];
   while (1) {
@@ -300,7 +270,6 @@ void menuCadastrar() {
         printf("Dia / Mês / Ano: ");
         scanf("%d %d %d", &registro.entrada.dia, &registro.entrada.mes,
               &registro.entrada.ano);
-        inserir(lista, registro);
         escreverArquivo(registro);
         escreverArquivobin(registro);
         limpaBufferInput();
