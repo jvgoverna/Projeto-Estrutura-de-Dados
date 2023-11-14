@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 typedef struct Data {
   int dia;
   int mes;
@@ -203,7 +204,9 @@ void removerpaciente(Registro registro, char referencia3[]) {
   return;
 }
 
-
+void limparTela() {
+  system("cls||clear");
+}
 
 void menuCadastrar() {
   Registro registro;
@@ -219,17 +222,21 @@ void menuCadastrar() {
     puts("-------------------------------");
     fgets(option, sizeof(option), stdin);
     if (option[0] > '5' || option[0] < '0') {
+      limparTela();
       puts("ERRO Digite uma opção válida!");
     } else if (option[1] >= '0') {
+      limparTela();
       puts("ERRO Digite uma opção válida!");
     } else {
       switch (option[0]) {
       case '0':
+        limparTela();
         puts("Voltando ao Menu Principal...");
         return;
         break;
       case '1':
         puts("---------- Opção 1 ----------");
+        limparTela();
         // Registro *registro = startRegistro();
         puts("Nome: ");
         int len_nome = sizeof(registro.nome);
@@ -276,6 +283,7 @@ void menuCadastrar() {
         break;
       case '2':
         puts("---------- Opção 2 ----------");
+        limparTela();
         char referencia[20];
         printf("Digite o nome do paciente cadastrado: ");
         fgets(referencia, sizeof(referencia), stdin);
@@ -283,11 +291,13 @@ void menuCadastrar() {
         break;
       case '3':
         puts("---------- Opção 3 ----------");
+        limparTela();
         leituraBin(registro);
         // imprimir_listacomp(lista);
         break;
       case '4':
         puts("---------- Opção 4 ----------");
+        limparTela();
         char referencia2[20];
         printf("Digite o nome do paciente cadastrado: ");
         fgets(referencia2, sizeof(referencia), stdin);
@@ -295,6 +305,7 @@ void menuCadastrar() {
         break;
       case '5':
         puts("---------- Opção 5 ----------");
+        limparTela();
         char referencia3[20];
         printf("Digite o nome do paciente cadastrado: ");
         fgets(referencia3, sizeof(referencia), stdin);

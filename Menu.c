@@ -1,6 +1,8 @@
-#include "Atendimento.h"
 #include "Cadastrar.h"
+#include "Atendimento.h"
+#include "Pesquisa.h"
 #include "Sobre.h"
+#include "Limpar.h"
 #include <stdio.h>
 
 int main() {
@@ -10,7 +12,7 @@ int main() {
     puts("1 - Cadastrar");
     puts("2 - Atendimento");
     puts("3 - Pesquisa");
-    puts("4 - Carregar / Salvar");
+    puts("4 - Limpar Arquvivo");
     puts("5 - Sobre");
     puts("0 - Sair");
     puts("-------------------------------");
@@ -36,9 +38,12 @@ int main() {
         break;
       case '3':
         puts("---------- Opção 3 ----------");
+        menuPesquisar();
         break;
       case '4':
         puts("---------- Opção 4 ----------");
+
+        limpar();
         break;
       case '5':
         puts("---------- Opção 5 ----------");

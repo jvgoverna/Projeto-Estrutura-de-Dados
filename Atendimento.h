@@ -128,11 +128,13 @@ void menuAtendimento(){
         }else{
             switch (option[0]){
             case '0':
+                limparTela();
                 puts("Voltando ao Menu Principal...");
                 return;
                 break;
             case '1':
                 puts("---------- Opção 1 ----------");
+                limparTela();
                 char referencia[20];
                 printf("Digite o nome do paciente cadastrado: ");
                 fgets(referencia, sizeof(referencia), stdin);
@@ -141,10 +143,12 @@ void menuAtendimento(){
                 break;
             case '2':
                 puts("---------- Opção 2 ----------");
+                limparTela();
                 desenfileirar(fila);
                 break;
             case '3':
                 puts("---------- Opção 3 ----------");
+                limparTela();
                 //mostrar a fila
                 mostrarFila(fila);
                 break;
