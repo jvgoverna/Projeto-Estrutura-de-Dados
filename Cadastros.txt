@@ -1,8 +1,0 @@
-Nome: joao
-RG: 123456789
-Idade: 19
-Dia: 11 / Mes: 11 / Ano: 2004
-Nome: pedro
-RG: 123456789
-Idade: 18
-Dia: 11 / Mes: 11 / Ano: 2004
