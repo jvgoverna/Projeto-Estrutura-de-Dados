@@ -1,6 +1,6 @@
 #ifndef ATENDIMENTO__H
 #define ATENDIMENTO__H
-
+//includes utilizados
 #include "Cadastrar.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,37 +19,37 @@ typedef struct {
 }Fila;
 
 Efila *inicializa_Efila(Registro dados) {
-  Efila *novo = (Efila *) malloc(sizeof(Efila));
-  novo->anterior = NULL;
-  novo->proximo = NULL;
-  novo->dados = dados;
+  Efila *novo = (Efila *) malloc(sizeof(Efila));  //Reservo um espaço na memória para armazenar a Efila
+  novo->anterior = NULL;  //seta o anterior para nulo (não tem nada)
+  novo->proximo = NULL; //seta o proximo para nulo (não tem nada)
+  novo->dados = dados; //seto o item do struct da Efila (dados) para receber o registro
   return novo;
 }
 
 Fila *inicializa_fila() {
-  Fila *fila = (Fila *)malloc(sizeof(Fila));
-  fila->head = NULL;
-  fila->tail = NULL;
-  fila->qtde = 0;
+  Fila *fila = (Fila *)malloc(sizeof(Fila));  //Reservo um espaço na memória para armazenar a fila
+  fila->head = NULL; //seta o head para nulo (não tem nada)
+  fila->tail = NULL;//seta a tail para nulo (não tem nada)
+  fila->qtde = 0; //seta a quantidade de elmentos para nulo (não tem nada)
   return fila;
 }
 
-void enfileirar(Fila *fila, Registro dados) {
-  Efila *novo = inicializa_Efila(dados);
-  if (fila->qtde == 0) {
+void enfileirar(Fila *fila, Registro dados) { //função de enfileirar (FI e FO)
+  Efila *novo = inicializa_Efila(dados); //crio uma nova Efila
+  if (fila->qtde == 0) { //se a efila está vazia , crio uma nova head e tail
     fila->head = novo;
     fila->tail = novo;
 
-  } else {
-    novo->anterior = fila->tail;
-    fila->tail->proximo = novo;
+  } else { //se não
+    novo->anterior = fila->tail; //o elemento anterior será igual ao ponteiro da fila tail
+    fila->tail->proximo = novo; // o próximo da cauda é o novo
   }
   fila->tail = novo;
-  fila->qtde++;
+  fila->qtde++; //aumenta a quantidade de elementos
 }
 
 
-void enfilerarPaciente(Fila *fila , Registro registro, char referencia[]) {
+void enfilerarPaciente(Fila *fila , Registro registro, char referencia[]) { //coloco os pacientes
   int verificador = 0;
   FILE *arquivo;
   arquivo = fopen("CadastrosBin.txt", "rb");
@@ -64,20 +64,20 @@ void enfilerarPaciente(Fila *fila , Registro registro, char referencia[]) {
       puts("Paciente foi colocado na fila com sucesso!");
     }
   }
-  if(verificador == 0){ //
+  if(verificador == 0){ 
     puts("Pessoa não foi cadastrada!");
   }
   fclose(arquivo);
 }
-void mostrarFila(Fila *fila){
-  Efila *atual = fila->head;
+void mostrarFila(Fila *fila){ //mostro os pacientes enfileirados
+  Efila *atual = fila->head; //crio uma Efila que será de inicio igual ao head da fila
 
-  if(fila->qtde ==0){
+  if(fila->qtde ==0){ //fila vazia
     puts("Não há pessoa na fila!");
-  }else{
+  }else{ //fila não vazia, mostro o número de pessoas nela
   printf("\nNúmero de pessoa na Fila: %d\n", fila->qtde);
   printf("\nHead -> \n");
-  while(atual != NULL){
+  while(atual != NULL){ //atualizo o nome das pessoas que estão enfileiradas
     printf("%s", atual->dados.nome);
     atual = atual->proximo;
   }
@@ -87,28 +87,28 @@ void mostrarFila(Fila *fila){
 }
 
 
-void desenfileirar(Fila *fila){
-  if(fila->qtde != 0){
+void desenfileirar(Fila *fila){ //desenfilero seguindo o (FI Fo)
+  if(fila->qtde != 0){ //fila não vazia
     //int valor = fila->head->dados;
     Efila *liberar = fila->head;
 
     if(fila->qtde == 1){ //apenas um valor na fila
-      fila->head = NULL;
+      fila->head = NULL; //coloco o head e tail para nulo para poder tirar o paciente
       fila->tail = NULL;
       
-    }else{
-      fila->head = fila->head->proximo;
-      fila->head->anterior = NULL;
+    }else{ //se a fila estiver com mais gente
+      fila->head = fila->head->proximo; //o head será igual ao próximo
+      fila->head->anterior = NULL; //e o anterior do head não existe mais
     }
-    fila->qtde--;
-    free(liberar);
+    fila->qtde--; //diminuo a quantidade de pessoas
+    free(liberar); //libero memoria
     puts("Paciente desenfileirado");
-  }else{
+  }else{ 
     printf("Fila vazia\n");
   }
 }
 
-void menuAtendimento(){
+void menuAtendimento(){ //menu atendimento mesma lógica de verificar se o usuário digitou corretamente
     char option[4];
     Fila *fila = inicializa_fila();
     Registro registro;
@@ -137,14 +137,14 @@ void menuAtendimento(){
                 limparTela();
                 char referencia[20];
                 printf("Digite o nome do paciente cadastrado: ");
-                fgets(referencia, sizeof(referencia), stdin);
-                enfilerarPaciente(fila,registro, referencia);
+                fgets(referencia, sizeof(referencia), stdin);//controle para ver se o nome está no arquivo
+                enfilerarPaciente(fila,registro, referencia);//enfilero
               
                 break;
             case '2':
                 puts("---------- Opção 2 ----------");
                 limparTela();
-                desenfileirar(fila);
+                desenfileirar(fila); //desenfilero
                 break;
             case '3':
                 puts("---------- Opção 3 ----------");

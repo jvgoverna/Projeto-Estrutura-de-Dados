@@ -5,7 +5,7 @@
 #include "Cadastrar.h"
 
 
-void limpar(){
+void limpar(){ //função para remover todos os cadastrados
   limparTela();
   remove("CadastrosBin.txt");
   remove("Cadastros.txt");

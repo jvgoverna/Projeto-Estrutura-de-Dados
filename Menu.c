@@ -1,3 +1,4 @@
+//Includes utilizados
 #include "Cadastrar.h"
 #include "Atendimento.h"
 #include "Pesquisa.h"
@@ -6,8 +7,9 @@
 #include <stdio.h>
 
 int main() {
-  char option[4];
-  while (1) {
+  char option[4]; //Crio esse char option para receber a opção escolhida pelo usuário
+  //e tratar erros caso o usuário não digite uma opção correta
+  while (1) { //Crio um loop infinito para o menu
     puts("-------------------------------");
     puts("1 - Cadastrar");
     puts("2 - Atendimento");
@@ -16,14 +18,20 @@ int main() {
     puts("5 - Sobre");
     puts("0 - Sair");
     puts("-------------------------------");
-    fgets(option, sizeof(option), stdin);
+    fgets(option, sizeof(option), stdin); //Recebe a opção digitada pelo usuario
 
-    if (option[0] > '5' || option[0] < '0') {
+    //Tratamento de erros, caso aconteça erro o usuário deverá digitar novamente
+    
+    //Se o usuário digitar algo que tenha mais de um caractere
+    //se o usuário digitar apenas caractere
+    //Se o usuário digitar algo que não seja um número entre 0 a 5
+    
+    if (option[0] > '5' || option[0] < '0') {  
       puts("ERRO Digite uma opção válida!");
     } else if (option[1] >= '0') {
       puts("ERRO Digite uma opção válida!");
     } else {
-      switch (option[0]) {
+      switch (option[0]) { //Switch case para cada opção
       case '0':
         puts("Saindo...");
         return 0;

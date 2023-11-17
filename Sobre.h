@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Cadastrar.h"
-
+// função para exibir o nomes dos participantes e disciplina 
 void sobre() {
   limparTela();
   puts("4º Semestre ");
